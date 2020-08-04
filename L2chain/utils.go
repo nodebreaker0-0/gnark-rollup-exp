@@ -18,7 +18,6 @@ package main
 
 import (
 	"hash"
-	"testing"
 
 	mimc "github.com/consensys/gnark/crypto/hash/mimc/bn256"
 	eddsa "github.com/consensys/gnark/crypto/signature/eddsa/bn256"
@@ -75,42 +74,4 @@ func createOperator(nbAccounts int) (Operator, []eddsa.PrivateKey) {
 
 	return operator, userAccounts
 
-}
-
-func compareAccount(t *testing.T, acc1, acc2 Account) {
-
-	if acc1.index != acc2.index {
-		t.Fatal("Incorrect index")
-	}
-	if acc1.nonce != acc2.nonce {
-		t.Fatal("Incorrect nonce")
-	}
-	if !acc1.balance.Equal(&acc2.balance) {
-		t.Log("Incorrect balance")
-	}
-	if !acc1.pubKey.A.X.Equal(&acc2.pubKey.A.X) {
-		t.Fatal("Incorrect public key (X)")
-	}
-	if !acc1.pubKey.A.Y.Equal(&acc2.pubKey.A.Y) {
-		t.Fatal("Incorrect public key (Y)")
-	}
-
-}
-
-func compareHashAccount(t *testing.T, h []byte, acc Account, hFunc hash.Hash) {
-
-	hFunc.Reset()
-	_, err := hFunc.Write(acc.Serialize())
-	if err != nil {
-		t.Fatal(err)
-	}
-	res := hFunc.Sum([]byte{})
-	if len(res) != len(h) {
-		t.Fatal("Error comparing hashes (different lengths)")
-	}
-	for i := 0; i < len(res); i++ {
-		if res[i] != h[i] {
-			t.Fatal("Error comparing hashes (different content)")
-		}
-	}
 }
