@@ -24,7 +24,7 @@ import (
 	"github.com/consensys/gurvy/bn256/fr"
 )
 
-func createAccount(i int, h hash.Hash) (Account, eddsa.PrivateKey) {
+func CreateAccount(i int, h hash.Hash) (Account, eddsa.PrivateKey) {
 
 	var acc Account
 	var rnd fr.Element
@@ -43,7 +43,7 @@ func createAccount(i int, h hash.Hash) (Account, eddsa.PrivateKey) {
 }
 
 // Returns a newly created operator and tha private keys of the associated accounts
-func createOperator(nbAccounts int) (Operator, []eddsa.PrivateKey) {
+func CreateOperator(nbAccounts int) (Operator, []eddsa.PrivateKey) {
 
 	hFunc := mimc.NewMiMC("seed")
 
@@ -54,7 +54,7 @@ func createOperator(nbAccounts int) (Operator, []eddsa.PrivateKey) {
 	// randomly fill the accounts
 	for i := 0; i < nbAccounts; i++ {
 
-		acc, privkey := createAccount(i, hFunc)
+		acc, privkey := CreateAccount(i, hFunc)
 
 		// fill the index map of the operator
 		operator.AccountMap[string(acc.pubKey.A.X.Bytes())] = acc.index

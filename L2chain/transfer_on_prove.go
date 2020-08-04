@@ -21,7 +21,7 @@ func main() {
 
 	nbAccounts := 16 // 16 accounts so we know that the proof length is 5
 
-	operator, users := createOperator(nbAccounts)
+	operator, users := CreateOperator(nbAccounts)
 
 	// read accounts involved in the transfer
 	sender, err := operator.readAccount(0)
