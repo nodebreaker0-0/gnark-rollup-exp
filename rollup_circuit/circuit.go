@@ -1,31 +1,15 @@
-/*
-Copyright © 2020 ConsenSys
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-package rollup_circuit
+package main
 
 import (
 	"strconv"
 
-	"github.com/nodebreaker0-0/gnark/encoding/gob"
-	"github.com/nodebreaker0-0/gnark/frontend"
-	"github.com/nodebreaker0-0/gnark/gadgets/accumulator/merkle"
-	twistededwards_gadget "github.com/nodebreaker0-0/gnark/gadgets/algebra/twistededwards"
-	"github.com/nodebreaker0-0/gnark/gadgets/hash/mimc"
-	"github.com/nodebreaker0-0/gnark/gadgets/signature/eddsa"
-	"github.com/nodebreaker0-0/gurvy"
+	"github.com/consensys/gnark/encoding/gob"
+	"github.com/consensys/gnark/frontend"
+	"github.com/consensys/gnark/gadgets/accumulator/merkle"
+	twistededwards_gadget "github.com/consensys/gnark/gadgets/algebra/twistededwards"
+	"github.com/consensys/gnark/gadgets/hash/mimc"
+	"github.com/consensys/gnark/gadgets/signature/eddsa"
+	"github.com/consensys/gurvy"
 )
 
 var (
