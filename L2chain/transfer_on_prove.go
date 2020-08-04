@@ -14,7 +14,8 @@ import (
 )
 
 var (
-	fCount uint
+	fCount     uint
+	fProofPath string
 )
 
 func main() {
@@ -40,7 +41,6 @@ func main() {
 	err = operator.updateState(transfer, 0)
 
 	fCount = 1
-	fProofPath := filepath.Clean("../")
 	fPkPath := filepath.Clean("../circuit.pk")
 	circuitPath := filepath.Clean("../circuit.r1cs")
 	circuitName := filepath.Base(circuitPath)

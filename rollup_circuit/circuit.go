@@ -24,7 +24,7 @@ var (
 	baseNameSenderMerkleAfter        = "merkle_sender_proof_after_"
 	baseNameSenderProofHelperAfter   = "merkle_sender_proof_helper_after_"
 	baseNameReceiverMerkleAfter      = "merkle_receiver_proof_after_"
-	baseNameReceiverProofHelperAfter = "merkle_receiver_proof_helper_after"
+	baseNameReceiverProofHelperAfter = "merkle_receiver_proof_helper_after_"
 	baseNameRootHashAfter            = "merkle_rh_after_"
 
 	// basename sender account pubkey

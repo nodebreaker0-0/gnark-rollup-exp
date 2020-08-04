@@ -26,11 +26,11 @@ import (
 	groth16_bn256 "github.com/consensys/gnark/backend/bn256/groth16"
 	"github.com/consensys/gnark/encoding/gob"
 	"github.com/consensys/gurvy"
-
 )
 
 // verifyCmd represents the verify command
-func main(){
+func main() {
+	fVkPath := filepath.Clean("../circuit.vk")
 	proofPath := filepath.Clean("../circuit.proof")
 	var vk groth16_bn256.VerifyingKey
 	if err := gob.Read(fVkPath, &vk, gurvy.BN256); err != nil {
@@ -66,6 +66,4 @@ func main(){
 		}
 		os.Exit(-1)
 	}
-}
-
 }

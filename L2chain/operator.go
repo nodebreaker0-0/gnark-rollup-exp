@@ -30,16 +30,16 @@ import (
 var (
 	// basename of the inputs for the proofs before update
 	baseNameSenderMerkleBefore        = "merkle_sender_proof_before_"
-	baseNameSenderProofHelperBefore   = "merkle_sender_proof_helper_before"
+	baseNameSenderProofHelperBefore   = "merkle_sender_proof_helper_before_"
 	baseNameReceiverMerkleBefore      = "merkle_receiver_proof_before_"
-	baseNameReceiverProofHelperBefore = "merkle_receiver_proof_helper_before"
+	baseNameReceiverProofHelperBefore = "merkle_receiver_proof_helper_before_"
 	baseNameRootHashBefore            = "merkle_rh_before_"
 
 	// basename of the inputs for the proofs after update
 	baseNameSenderMerkleAfter        = "merkle_sender_proof_after_"
-	baseNameSenderProofHelperAfter   = "merkle_sender_proof_helper_after"
+	baseNameSenderProofHelperAfter   = "merkle_sender_proof_helper_after_"
 	baseNameReceiverMerkleAfter      = "merkle_receiver_proof_after_"
-	baseNameReceiverProofHelperAfter = "merkle_receiver_proof_helper_after"
+	baseNameReceiverProofHelperAfter = "merkle_receiver_proof_helper_after_"
 	baseNameRootHashAfter            = "merkle_rh_after_"
 
 	// basename sender account pubkey
