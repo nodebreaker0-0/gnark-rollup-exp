@@ -1,21 +1,24 @@
 # circuit gen
+```bash
 cd rollup_circuit
 go run circuit.go
 mv circuit.r1cs ../.
+```
 
 # r1cs setup
-//build gnark
+### build gnark
 gnark setup circuit.r1cs
 
 # L2 transfer_on_prove
-//build L2chain
+```bash
 cd L2chain
-go build
-./L2chain
+go run .
 mv circuit.proof ../.
+mv input.public ../.
+```
 
 # L1 transfer_on_verify
-//build verify
+```bash
 cd onchain
-go build
-./verify
+go run .
+```

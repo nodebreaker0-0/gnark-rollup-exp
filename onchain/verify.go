@@ -28,8 +28,13 @@ import (
 	"github.com/consensys/gurvy"
 )
 
+var (
+	fInputPath string
+)
+
 // verifyCmd represents the verify command
 func main() {
+	fInputPath = filepath.Clean("../input.public")
 	fVkPath := filepath.Clean("../circuit.vk")
 	proofPath := filepath.Clean("../circuit.proof")
 	var vk groth16_bn256.VerifyingKey

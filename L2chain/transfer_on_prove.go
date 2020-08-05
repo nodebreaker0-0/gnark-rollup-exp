@@ -97,6 +97,8 @@ func main() {
 		fmt.Println("error:", err)
 		os.Exit(-1)
 	}
+	public := operator.witnesses.DiscardSecrets()
+	public.WriteFile("input.public")
 
 	fmt.Printf("%-30s %-30s %-30s\n", "generated proof", proofPath, duration)
 
