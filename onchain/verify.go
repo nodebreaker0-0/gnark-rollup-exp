@@ -35,7 +35,7 @@ var (
 // verifyCmd represents the verify command
 func main() {
 	fInputPath = filepath.Clean("../input.public")
-	fVkPath := filepath.Clean("../circuit.vk")
+	fVkPath := filepath.Clean("../circuit.r1cs.vk")
 	proofPath := filepath.Clean("../circuit.proof")
 	var vk groth16_bn256.VerifyingKey
 	if err := gob.Read(fVkPath, &vk, gurvy.BN256); err != nil {
@@ -71,4 +71,5 @@ func main() {
 		}
 		os.Exit(-1)
 	}
+	fmt.Printf("%-30s %-30s %-30s\n", "proof is valid", proofPath, time.Since(start))
 }

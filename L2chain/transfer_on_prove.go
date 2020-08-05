@@ -41,7 +41,7 @@ func main() {
 	err = operator.updateState(transfer, 0)
 
 	fCount = 1
-	fPkPath := filepath.Clean("../circuit.pk")
+	fPkPath := filepath.Clean("../circuit.r1cs.pk")
 	circuitPath := filepath.Clean("../circuit.r1cs")
 	circuitName := filepath.Base(circuitPath)
 	circuitExt := filepath.Ext(circuitName)
@@ -97,9 +97,10 @@ func main() {
 		fmt.Println("error:", err)
 		os.Exit(-1)
 	}
+
 	public := operator.witnesses.DiscardSecrets()
+	//fmt.Println(public)
 	public.WriteFile("input.public")
 
 	fmt.Printf("%-30s %-30s %-30s\n", "generated proof", proofPath, duration)
-
 }

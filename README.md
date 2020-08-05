@@ -6,8 +6,10 @@ mv circuit.r1cs ../.
 ```
 
 # r1cs setup
-### build gnark
-gnark setup circuit.r1cs
+```bash
+cd setup
+go run setup.go
+```
 
 # L2 transfer_on_prove
 ```bash
