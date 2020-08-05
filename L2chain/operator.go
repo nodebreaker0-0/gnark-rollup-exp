@@ -78,7 +78,7 @@ var (
 )
 
 // BatchSize size of a batch of transactions to put in a snark
-var BatchSize = 10
+var BatchSize = 1
 
 // Queue queue for storing the transfers (fixed size queue)
 type Queue struct {
