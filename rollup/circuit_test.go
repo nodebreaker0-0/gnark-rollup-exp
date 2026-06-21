@@ -90,3 +90,18 @@ func TestCircuitProveVerifyBatch3(t *testing.T) {
 		t.Fatalf("expected end-to-end proof to verify for batch of 3: %v", err)
 	}
 }
+
+// TestCircuitProveVerifyPLONK cross-checks that the same rollup circuit proves
+// and verifies under the PLONK backend, not just Groth16.
+func TestCircuitProveVerifyPLONK(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping PLONK proving in -short mode")
+	}
+	witnesses, pathLen := buildBatch(t, 16, 1)
+	circuit := New(len(witnesses), pathLen)
+	assignment := Assign(witnesses, pathLen)
+
+	if err := prove.RunPLONK(circuit, assignment); err != nil {
+		t.Fatalf("expected end-to-end PLONK proof to verify: %v", err)
+	}
+}

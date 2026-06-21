@@ -45,6 +45,6 @@ Status legend: [ ] pending · [~] in progress · [x] done
 - [x] T063 commit
 
 ## Post-MVP backlog (not yet started)
-- [ ] T070 PLONK backend option alongside Groth16 (FR-001 centralization)
+- [x] T070 PLONK backend option alongside Groth16 (prove/plonk.go)
 - [x] T071 extract reusable gadgets (account commitment, leaf+membership) into gadget/
 - [ ] T072 benchmarks (constraint counts, prove/verify timings) per circuit

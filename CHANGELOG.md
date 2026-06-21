@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **PLONK backend** in `prove` (`CompilePLONK`, `SetupPLONK`, `ProvePLONK`,
+  `VerifyPLONK`, `RunPLONK`) alongside Groth16, using the scs builder and a
+  development-only KZG SRS. The rollup circuit is cross-checked under both
+  backends.
+
 ## [v0.2.0] — 2026-06-21
 
 First release of the rebuilt `zkkit` library on modern `gnark`. This is a
