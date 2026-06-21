@@ -13,7 +13,7 @@ import (
 
 // buildBatch applies `count` sequential transfers from account 0 to account 1
 // and returns the witnesses plus the Merkle path length.
-func buildBatch(t *testing.T, nbAccounts, count int) ([]TransferWitness, int) {
+func buildBatch(t testing.TB, nbAccounts, count int) ([]TransferWitness, int) {
 	t.Helper()
 	r := rand.New(rand.NewSource(99)) //#nosec G404 -- deterministic test
 	op := NewOperator(nbAccounts, cmimc.NewMiMC())

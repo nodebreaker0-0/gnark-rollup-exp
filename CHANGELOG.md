@@ -10,6 +10,8 @@ All notable changes to this project are documented here. This project adheres to
   `VerifyPLONK`, `RunPLONK`) alongside Groth16, using the scs builder and a
   development-only KZG SRS. The rollup circuit is cross-checked under both
   backends.
+- **Benchmarks & sizing**: `TestReportConstraints` logs circuit sizes and
+  `BenchmarkProveGroth16`/`BenchmarkProvePLONK` time proving for the rollup.
 
 ## [v0.2.0] — 2026-06-21
 

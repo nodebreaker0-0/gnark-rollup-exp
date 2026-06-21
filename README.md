@@ -86,6 +86,17 @@ zkkit/
 └── decisions/       autonomous decision log
 ```
 
+## Benchmarks
+
+```bash
+go test -run TestReportConstraints -v ./rollup   # circuit sizes
+go test -run '^$' -bench BenchmarkProve ./rollup # proving timings
+```
+
+The rollup circuit is ~29.8k R1CS constraints per transfer (linear in batch
+size). On the reference machine a single-transfer Groth16 proof takes ~0.24s;
+the same circuit under PLONK takes ~1.1s.
+
 ## Relationship to `gnark`
 
 `zkkit` re-exports nothing and hides nothing. Your circuits use `frontend.API`
