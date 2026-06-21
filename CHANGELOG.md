@@ -3,19 +3,6 @@
 All notable changes to this project are documented here. This project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Added
-- **PLONK backend** in `prove` (`CompilePLONK`, `SetupPLONK`, `ProvePLONK`,
-  `VerifyPLONK`, `RunPLONK`) alongside Groth16, using the scs builder and a
-  development-only KZG SRS. The rollup circuit is cross-checked under both
-  backends.
-- **Benchmarks & sizing**: `TestReportConstraints` logs circuit sizes and
-  `BenchmarkProveGroth16`/`BenchmarkProvePLONK` time proving for the rollup.
-- **Solidity verifier export**: `prove.ExportSolidityVerifier` /
-  `SaveSolidityVerifier` emit an on-chain Groth16 verifier contract (BN254).
-- Rollup generality test covering a batch of distinct sender/receiver pairs.
-
 ## [v0.2.0] — 2026-06-21
 
 First release of the rebuilt `zkkit` library on modern `gnark`. This is a
@@ -29,6 +16,11 @@ and preserved only under `legacy/`.
   (`Keys.Save`/`LoadKeys`, `SaveProof`/`LoadProof`, `SaveCCS`/`LoadCCS`,
   `SavePublicWitness`/`LoadPublicWitness`) so setup, proving, and verification can
   run as separate steps from on-disk artifacts.
+- **PLONK backend** in `prove` (`CompilePLONK`, `SetupPLONK`, `ProvePLONK`,
+  `VerifyPLONK`, `RunPLONK`) alongside Groth16, using the scs builder and a
+  development-only KZG SRS. The rollup circuit is cross-checked under both backends.
+- **Solidity verifier export**: `prove.ExportSolidityVerifier` /
+  `SaveSolidityVerifier` emit an on-chain Groth16 verifier contract (BN254).
 - **`gadget`** — reusable in-circuit building blocks: `Account.Commit` (MiMC
   account commitment) and `VerifyMembership` (binds a commitment to a Merkle leaf
   and proof to a public root, then checks inclusion).
@@ -37,11 +29,15 @@ and preserved only under `legacy/`.
   application producing a `TransferWitness`) plus the in-circuit `Circuit` and its
   `Assign`, proving a batch of transfers was applied correctly.
 - **`examples`** — runnable, tested circuits: `cubic`, `mimc`, `eddsa`.
+- **Benchmarks & sizing**: `TestReportConstraints` logs circuit sizes;
+  `BenchmarkProveGroth16`/`BenchmarkProvePLONK` time proving for the rollup
+  (~29.8k constraints/transfer; Groth16 ~0.24s, PLONK ~1.1s for batch=1).
+- Rollup generality test covering a batch of distinct sender/receiver pairs.
 - Tooling: `make verify` gate (fmt, vet, test, secrets scan), GitHub Actions CI
   and release workflows, spec-kit documents under `specs/`, and a decision log.
 
 ### Notes
-- Curve BN254, backend Groth16. PLONK is planned (see `specs/001-zkkit/tasks.md`).
+- Curve BN254. Backends: Groth16 (default) and PLONK.
 - Requires Go ≥ 1.25 (gnark v0.15 needs ≥ 1.25.7); the toolchain is pinned in
   `go.mod`.
 - The trusted setup performed by `prove.Setup` is an in-process, development-only
