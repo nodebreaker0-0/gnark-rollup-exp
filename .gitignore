@@ -15,3 +15,6 @@ dist/
 
 # scratch / probe files (cannot be unlinked on this FS; ignore them)
 _probe*.txt
+
+# editor/linter backup artifacts (e.g. foo.go.123456789) left on a no-unlink FS
+*.go.[0-9]*
