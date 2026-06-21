@@ -38,6 +38,15 @@ application layer:
 The goal is that a Go developer who has never written a circuit can read one
 example, copy it, and have a verified proof in minutes.
 
+## Install
+
+```bash
+go get github.com/nodebreaker0-0/gnark-rollup-exp@v0.2.0
+```
+
+Requires Go ≥ 1.25 (gnark v0.15 needs ≥ 1.25.7). See [`CHANGELOG.md`](./CHANGELOG.md)
+for releases.
+
 ## Quick start
 
 ```bash
