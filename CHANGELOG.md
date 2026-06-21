@@ -12,6 +12,9 @@ All notable changes to this project are documented here. This project adheres to
   backends.
 - **Benchmarks & sizing**: `TestReportConstraints` logs circuit sizes and
   `BenchmarkProveGroth16`/`BenchmarkProvePLONK` time proving for the rollup.
+- **Solidity verifier export**: `prove.ExportSolidityVerifier` /
+  `SaveSolidityVerifier` emit an on-chain Groth16 verifier contract (BN254).
+- Rollup generality test covering a batch of distinct sender/receiver pairs.
 
 ## [v0.2.0] — 2026-06-21
 

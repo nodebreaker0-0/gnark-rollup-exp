@@ -41,8 +41,10 @@ Gadget extraction and PLONK are post-MVP.
 ## Out of scope
 
 - Reimplementing any `gnark` primitive (field math, constraint compiler, backends).
-- On-chain Solidity verifier deployment (the PoC's "onchain" step was Go-only;
-  a real verifier contract is a separate, later effort).
+- On-chain Solidity verifier *deployment* (gas-tuned contracts, network deploy
+  scripts). Generating the verifier contract is supported (see
+  `prove.ExportSolidityVerifier`); deploying and integrating it on a real chain
+  is left to the consumer. (Revised 2026-06-21; see decisions/.)
 - A general CLI / daemon. The deliverable is a library + tests + examples.
 - Trusted-setup ceremony tooling. Tests use throwaway in-process setup.
 - New cryptography. We use BN254 + Groth16 + MiMC + EdDSA as the PoC did.

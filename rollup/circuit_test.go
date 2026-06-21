@@ -105,3 +105,47 @@ func TestCircuitProveVerifyPLONK(t *testing.T) {
 		t.Fatalf("expected end-to-end PLONK proof to verify: %v", err)
 	}
 }
+
+// TestCircuitProveVerifyMultiPair proves a batch with two distinct sender/receiver
+// pairs (0->1 and 2->3), showing the operator and circuit are not specialized to
+// a single pair.
+func TestCircuitProveVerifyMultiPair(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping multi-pair proving in -short mode")
+	}
+	const n = 16
+	r := rand.New(rand.NewSource(123)) //#nosec G404 -- deterministic test
+	op := NewOperator(n, cmimc.NewMiMC())
+	privs := make([]eddsa.PrivateKey, n)
+	for i := 0; i < n; i++ {
+		acc, priv, err := NewAccount(i, uint64(200+i), r)
+		if err != nil {
+			t.Fatalf("account %d: %v", i, err)
+		}
+		op.AddAccount(acc)
+		privs[i] = priv
+	}
+
+	pairs := [][2]int{{0, 1}, {2, 3}}
+	witnesses := make([]TransferWitness, 0, len(pairs))
+	for _, p := range pairs {
+		sender, _ := op.ReadAccount(uint64(p[0]))
+		receiver, _ := op.ReadAccount(uint64(p[1]))
+		transfer := NewTransfer(2, sender.PubKey, receiver.PubKey, sender.Nonce)
+		if _, err := transfer.Sign(privs[p[0]], cmimc.NewMiMC()); err != nil {
+			t.Fatalf("sign %v: %v", p, err)
+		}
+		w, err := op.ApplyTransfer(transfer)
+		if err != nil {
+			t.Fatalf("apply %v: %v", p, err)
+		}
+		witnesses = append(witnesses, w)
+	}
+
+	pathLen := len(witnesses[0].SenderProofBefore.Path)
+	circuit := New(len(witnesses), pathLen)
+	assignment := Assign(witnesses, pathLen)
+	if err := prove.Run(circuit, assignment); err != nil {
+		t.Fatalf("expected multi-pair batch proof to verify: %v", err)
+	}
+}

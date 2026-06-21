@@ -97,6 +97,18 @@ The rollup circuit is ~29.8k R1CS constraints per transfer (linear in batch
 size). On the reference machine a single-transfer Groth16 proof takes ~0.24s;
 the same circuit under PLONK takes ~1.1s.
 
+## On-chain verification
+
+A Groth16 verifying key can be exported as a Solidity verifier contract for
+on-chain proof verification (BN254):
+
+```go
+prove.SaveSolidityVerifier("Verifier.sol", keys.VK)
+```
+
+Deploying and integrating that contract (network, gas tuning) is left to the
+consumer.
+
 ## Relationship to `gnark`
 
 `zkkit` re-exports nothing and hides nothing. Your circuits use `frontend.API`

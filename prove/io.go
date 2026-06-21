@@ -167,3 +167,22 @@ func SavePublicWitness(path string, wit witness.Witness) error {
 func LoadPublicWitness(path string) (witness.Witness, error) {
 	return readFromFile(path, ReadPublicWitness)
 }
+
+// --- on-chain verifier export ---
+
+// ExportSolidityVerifier writes a Solidity verifier contract for a Groth16
+// verifying key to w. Only BN254 is supported (which is zkkit's curve). The
+// emitted contract verifies proofs produced for the same circuit on-chain.
+func ExportSolidityVerifier(w io.Writer, vk groth16.VerifyingKey) error {
+	if err := vk.ExportSolidity(w); err != nil {
+		return fmt.Errorf("export solidity verifier: %w", err)
+	}
+	return nil
+}
+
+// SaveSolidityVerifier writes the Solidity verifier contract to path.
+func SaveSolidityVerifier(path string, vk groth16.VerifyingKey) error {
+	return writeToFile(path, func(w io.Writer) (int64, error) {
+		return 0, ExportSolidityVerifier(w, vk)
+	})
+}
