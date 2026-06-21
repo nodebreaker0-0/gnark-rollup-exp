@@ -37,3 +37,14 @@ Status legend: [ ] pending · [~] in progress · [x] done
 - [x] T051 .github/workflows/ci.yml
 - [x] T052 godoc on all exported symbols; examples/README
 - [x] T053 go mod tidy; final make verify green; commit
+
+## P7 — Persistence (FR-002 complete)
+- [x] T060 prove/io.go: stream + file helpers for CS, pk, vk, proof, public witness
+- [x] T061 Keys.Save / LoadKeys
+- [x] T062 cross-stage persisted prove/verify test (temp files)
+- [x] T063 commit
+
+## Post-MVP backlog (not yet started)
+- [ ] T070 PLONK backend option alongside Groth16 (FR-001 centralization)
+- [ ] T071 extract reusable gadgets (account commitment, leaf+membership) into gadget/
+- [ ] T072 benchmarks (constraint counts, prove/verify timings) per circuit
