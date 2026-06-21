@@ -1,0 +1,17 @@
+# build / proving artifacts (regenerable)
+*.r1cs
+*.pk
+*.vk
+*.proof
+*.ccs
+input.public
+/circuit.r1cs.pk
+
+# Go
+bin/
+dist/
+*.test
+*.out
+
+# scratch / probe files (cannot be unlinked on this FS; ignore them)
+_probe*.txt
