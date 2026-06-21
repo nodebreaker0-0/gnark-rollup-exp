@@ -70,8 +70,8 @@ Proving and verifying it is a single helper call (see
 zkkit/
 ├── examples/        runnable example circuits (cubic, mimc, eddsa, rollup)
 ├── rollup/          the zk-rollup reference library (accounts, transfers, operator, circuit)
-├── prove/           the compile → setup → prove → verify harness (planned)
-├── gadget/          reusable in-circuit gadgets (planned)
+├── prove/           the compile → setup → prove → verify harness (+ key/proof persistence)
+├── gadget/          reusable in-circuit gadgets (account commitment, Merkle membership)
 ├── legacy/          the original v0.2.1-alpha PoC, kept for reference
 ├── specs/           spec-kit working documents
 └── decisions/       autonomous decision log

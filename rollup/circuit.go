@@ -7,15 +7,12 @@ import (
 	"github.com/consensys/gnark/std/algebra/native/twistededwards"
 	"github.com/consensys/gnark/std/hash/mimc"
 	"github.com/consensys/gnark/std/signature/eddsa"
+	"github.com/nodebreaker0-0/gnark-rollup-exp/gadget"
 )
 
-// AccountConstraints is the in-circuit representation of an account.
-type AccountConstraints struct {
-	Index   frontend.Variable
-	Nonce   frontend.Variable
-	Balance frontend.Variable
-	PubKey  eddsa.PublicKey
-}
+// AccountConstraints is the in-circuit representation of an account. It is an
+// alias for gadget.Account, the reusable account-commitment building block.
+type AccountConstraints = gadget.Account
 
 // TransferConstraints is the in-circuit representation of a signed transfer.
 type TransferConstraints struct {
@@ -97,17 +94,13 @@ func (c *Circuit) Define(api frontend.API) error {
 	}
 
 	for i := 0; i < c.batchSize; i++ {
-		// 1. each account is a well-formed leaf: H(account) == Path[0]
-		ensureLeaf(api, &h, c.SenderBefore[i], c.ProofSenderBefore[i].Path[0])
-		ensureLeaf(api, &h, c.ReceiverBefore[i], c.ProofReceiverBefore[i].Path[0])
-		ensureLeaf(api, &h, c.SenderAfter[i], c.ProofSenderAfter[i].Path[0])
-		ensureLeaf(api, &h, c.ReceiverAfter[i], c.ProofReceiverAfter[i].Path[0])
-
-		// 2. membership in the before/after roots
-		verifyMembership(api, &h, c.ProofSenderBefore[i], c.RootsBefore[i], c.SenderBefore[i].Index)
-		verifyMembership(api, &h, c.ProofReceiverBefore[i], c.RootsBefore[i], c.ReceiverBefore[i].Index)
-		verifyMembership(api, &h, c.ProofSenderAfter[i], c.RootsAfter[i], c.SenderAfter[i].Index)
-		verifyMembership(api, &h, c.ProofReceiverAfter[i], c.RootsAfter[i], c.ReceiverAfter[i].Index)
+		// 1+2. each account is committed at its index in the before/after roots
+		// (the gadget binds the account commitment to the proof leaf, the proof
+		// to the public root, and checks inclusion).
+		gadget.VerifyMembership(api, &h, c.SenderBefore[i], c.ProofSenderBefore[i], c.RootsBefore[i])
+		gadget.VerifyMembership(api, &h, c.ReceiverBefore[i], c.ProofReceiverBefore[i], c.RootsBefore[i])
+		gadget.VerifyMembership(api, &h, c.SenderAfter[i], c.ProofSenderAfter[i], c.RootsAfter[i])
+		gadget.VerifyMembership(api, &h, c.ReceiverAfter[i], c.ProofReceiverAfter[i], c.RootsAfter[i])
 
 		// 3. the transfer is bound to the sender and signed by them
 		bindTransfer(api, c.Transfers[i], c.SenderBefore[i], c.ReceiverBefore[i])
@@ -119,19 +112,6 @@ func (c *Circuit) Define(api frontend.API) error {
 		verifyUpdate(api, c.SenderBefore[i], c.ReceiverBefore[i], c.SenderAfter[i], c.ReceiverAfter[i], c.Transfers[i].Amount)
 	}
 	return nil
-}
-
-// ensureLeaf asserts H(index||nonce||balance||pubKeyX||pubKeyY) == leaf.
-func ensureLeaf(api frontend.API, h *mimc.MiMC, acc AccountConstraints, leaf frontend.Variable) {
-	h.Reset()
-	h.Write(acc.Index, acc.Nonce, acc.Balance, acc.PubKey.A.X, acc.PubKey.A.Y)
-	api.AssertIsEqual(h.Sum(), leaf)
-}
-
-// verifyMembership binds the proof to a public root and checks inclusion.
-func verifyMembership(api frontend.API, h *mimc.MiMC, proof merkle.MerkleProof, root, index frontend.Variable) {
-	api.AssertIsEqual(proof.RootHash, root)
-	proof.VerifyProof(api, h, index)
 }
 
 // bindTransfer asserts the transfer's keys/nonce match the sender/receiver
