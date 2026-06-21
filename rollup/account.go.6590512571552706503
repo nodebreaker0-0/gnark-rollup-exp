@@ -1,0 +1,88 @@
+// Package rollup is a modern, account-based zk-rollup reference built on gnark
+// v0.15. It provides the off-circuit ("native") types — accounts, transfers, and
+// an operator that maintains a MiMC Merkle state — and the in-circuit Circuit
+// that proves a batch of transfers was applied correctly.
+//
+// It is a direct, modernized descendant of the original gnark-rollup-exp proof
+// of concept, rebuilt against the current gnark standard gadgets.
+package rollup
+
+import (
+	"encoding/binary"
+	"errors"
+	"hash"
+
+	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
+	"github.com/consensys/gnark-crypto/ecc/bn254/twistededwards/eddsa"
+)
+
+// SizeAccount is the byte length of a serialized account. The layout is five
+// 32-byte chunks: index||nonce (packed into the first chunk), balance, public
+// key X, public key Y.
+const SizeAccount = 160
+
+// ErrSizeByteSlice is returned when a byte slice does not match SizeAccount.
+var ErrSizeByteSlice = errors.New("rollup: byte slice size is inconsistent with account size")
+
+// Account is a rollup account held in the operator's state.
+type Account struct {
+	Index   uint64         // position of the account in the state tree
+	Nonce   uint64         // number of transfers sent from this account
+	Balance fr.Element     // account balance
+	PubKey  eddsa.PublicKey // owner's EdDSA public key
+}
+
+// Reset zeroes an account to a canonical empty value (Y=1 so the point is valid).
+func (a *Account) Reset() {
+	a.Index = 0
+	a.Nonce = 0
+	a.Balance.SetZero()
+	a.PubKey.A.X.SetZero()
+	a.PubKey.A.Y.SetOne()
+}
+
+// Serialize encodes the account as SizeAccount bytes:
+// index||nonce || balance || pubKeyX || pubKeyY, each field big-endian in a
+// 32-byte chunk (index and nonce share the first chunk).
+func (a *Account) Serialize() []byte {
+	var res [SizeAccount]byte
+
+	binary.BigEndian.PutUint64(res[24:32], a.Index)
+	binary.BigEndian.PutUint64(res[56:64], a.Nonce)
+
+	bal := a.Balance.Bytes()
+	copy(res[64:96], bal[:])
+
+	x := a.PubKey.A.X.Bytes()
+	copy(res[96:128], x[:])
+
+	y := a.PubKey.A.Y.Bytes()
+	copy(res[128:160], y[:])
+
+	return res[:]
+}
+
+// Deserialize decodes a SizeAccount byte slice into an Account.
+func Deserialize(data []byte) (Account, error) {
+	var a Account
+	a.Reset()
+
+	if len(data) != SizeAccount {
+		return a, ErrSizeByteSlice
+	}
+
+	a.Index = binary.BigEndian.Uint64(data[24:32])
+	a.Nonce = binary.BigEndian.Uint64(data[56:64])
+	a.Balance.SetBytes(data[64:96])
+	a.PubKey.A.X.SetBytes(data[96:128])
+	a.PubKey.A.Y.SetBytes(data[128:160])
+	return a, nil
+}
+
+// Hash returns the MiMC hash of the serialized account, the value stored at the
+// account's Merkle leaf. The hasher is reset before use.
+func (a *Account) Hash(h hash.Hash) []byte {
+	h.Reset()
+	h.Write(a.Serialize())
+	return h.Sum(nil)
+}
